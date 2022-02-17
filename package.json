@@ -1,0 +1,29 @@
+{
+  "name": "@tektech/teesio",
+  "version": "0.0.1-init",
+  "description": "TeeSio, a wrapper around socket.io.js",
+  "main": "TeeSio.js",
+  "scripts": {
+    "test": "./test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tek-Tech/teesio.git"
+  },
+  "keywords": [
+    "socket.io",
+    "tektech",
+    "tek-tech",
+    "nodejs",
+    "realtime",
+    "communication",
+    "dev",
+    "dev0ps"
+  ],
+  "author": "El-Hadji Seybatou Mbengue (TEK-TECH)",
+  "license": "SEE LICENSE IN FILE",
+  "bugs": {
+    "url": "https://github.com/Tek-Tech/teesio/issues"
+  },
+  "homepage": "https://github.com/Tek-Tech/teesio#readme"
+}
