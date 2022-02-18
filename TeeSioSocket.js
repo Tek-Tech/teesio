@@ -29,6 +29,7 @@ class TeeSioSocket extends Ear{
     }
 
     constructor(socket){
+        super()
         this.identity = {uuid:null}
         this.uuidentified = false
         this.socket = socket
