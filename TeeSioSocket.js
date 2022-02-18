@@ -3,15 +3,174 @@ if((typeof window)==undefined){
 }
 class TeeSioSocket extends Ear{
 
+    initSocket(cb){
+ 
+        if(cb)cb()
+    }
+
+    _attribute(attribute){
+        return this.identity.hasOwnProperty(attribute) ? this.identity[attribute] : null
+    }
+    
+    setUuid(uuid){
+        this.identity.uuid = uuid
+        this.uuidentified = true
+    }
+    getUuid(){
+        return this._attribute('uuid')
+    }
+
+    isUuidentified(){
+        return this.uuidentified
+    }
 
     init(){
-
+        this.initSocket()
     }
 
-    constructor(socket,isCli=true){
-
+    constructor(socket){
+        this.identity = {uuid:null}
+        this.uuidentified = false
+        this.socket = socket
     }
 }
+
+class TeeSioCliSocket extends TeeSioSocket{
+
+
+    setUuid(uuid){
+        super.setUuid(uuid)
+        if((typeof Cman)!='undefined') Cman.setCook('diuu',this.getUuid())
+        this.uuidentified = true
+    }
+
+    initSocket(cb){
+ 
+        this.socket.on(
+            'askingUuidentify',()=>{
+
+                this.showUuidentity()
+        
+            }
+        )
+        this.socket.on(
+            'givinuuidentity',uuid=>{
+                this.setUuid()
+            }
+        )
+
+    }
+
+    showUuidentity(){
+        this.getUuidentity(
+            ()=>{
+                if(this.getUuid()){
+                    this.socket.emit("uuidentity",this.getUuid())
+                }
+                else this.noUuidentidyProc()
+            }
+        )
+
+
+    }
+
+
+    noUuidentidyProc(){
+        this.socket.emit(
+            'nouuidentity',{}
+        )
+    }
+
+    getUuidentity(cb){
+
+        if((typeof window)!='undefined' && window.gotCman){
+            const uuid = Cman.cooks().hasOwnProperty('diuu') ? Cman.cooks()['diuu'] : null
+            this.setUuid(uuid)
+            cb(uuid)
+        }
+
+    }
+
+    connect(cb){
+        this.socket = io.connect('/',window.hasOwnProperty('gotCman')&&Cman.cooks().hasOwnProperty('diuu')?{diuu:Cman.cooks('diuu')}:{})
+        if(cb)cb()
+    }
+
+    constructor(socket){
+        super(socket)
+        this.getUuidentity()
+        this.connect(()=>{
+            this.init()
+        })
+    }
+
+}
+
+class TeeSioServSocket extends TeeSioSocket{
+
+
+    processCliData(){
+        console.log('this.is cli data ', this.identity)
+    }
+
+    generateUuid(){
+        const { v4  } = require('uuid')
+        let uu = v4()
+        this.setUuid(uu)
+        return  uu
+    }
+
+    __askIdentify(){
+        this.socket.emit(
+            'askingIdentity',{}
+        )
+        this.socket.emit(
+            'askingUuidentify',{}
+        )
+        this.socket.on(
+            'uuidentity',(
+                uuidentity=>{
+                    this.setUuid(uuidentity)
+                    this.processCliData()
+                }
+            )
+        )
+        
+        this.socket.on(
+            'nouuidentity',()=>{
+                this.socket.emit(
+                    'givinuuidentity'
+                    ,this.getUuid()?this.getUuid():this.generateUuid()
+                )
+            }
+        )
+    }
+
+    checkSocketGreetings(){
+        const {handshake} = this.socket
+        const {query} = handshake
+        const {diuu} = query
+        if(diuu)this.setUuid(diuu)
+    }
+
+    initSocket(){
+
+
+        this.__askIdentify()
+        
+        
+    }
+    constructor(socket){
+        super(socket)
+        this.checkSocketGreetings()
+        this.init()
+    }
+
+
+}
+
+
+
 if((typeof module)!=='undefined'){
-    module.exports = TeeSioSocket
+    module.exports = {TeeSioServSocket}
 }

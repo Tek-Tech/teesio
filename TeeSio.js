@@ -98,4 +98,4 @@ class TeeSio extends Ear{
 
 
 
-module.exports = TeeSio
+module.exports = {TeeSio}
