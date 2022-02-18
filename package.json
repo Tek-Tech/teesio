@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/Tek-Tech/teesio#readme",
   "dependencies": {
-    "@tek-tech/ears": "^0.0.1-beta-r"
+    "@tek-tech/ears": "^0.0.1-beta-r",
+    "uuid": "^8.3.2"
   }
 }

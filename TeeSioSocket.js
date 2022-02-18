@@ -1,5 +1,6 @@
-if((typeof window)==undefined){
-    const { Ear } = require("@tek-tech/ears");
+if(((typeof module) != 'undefined')){
+    
+    Ear = require("@tek-tech/ears").Ear;
 }
 class TeeSioSocket extends Ear{
 
