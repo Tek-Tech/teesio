@@ -12,6 +12,6 @@ class TeeSioSocket extends Ear{
 
     }
 }
-if(typeof module!==undefined){
+if((typeof module)!=='undefined'){
     module.exports = TeeSioSocket
 }
