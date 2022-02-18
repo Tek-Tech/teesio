@@ -1,6 +1,6 @@
 {
-  "name": "@tektech/teesio",
-  "version": "0.0.1-init",
+  "name": "@tek-tech/teesio",
+  "version": "0.0.1-Init",
   "description": "TeeSio, a wrapper around socket.io.js",
   "main": "TeeSio.js",
   "scripts": {
@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/Tek-Tech/teesio/issues"
   },
-  "homepage": "https://github.com/Tek-Tech/teesio#readme"
+  "homepage": "https://github.com/Tek-Tech/teesio#readme",
+  "dependencies": {
+    "@tek-tech/ears": "^0.0.1-beta-r"
+  }
 }
