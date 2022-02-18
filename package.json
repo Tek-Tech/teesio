@@ -1,6 +1,6 @@
 {
   "name": "@tek-tech/teesio",
-  "version": "0.0.1-tee2",
+  "version": "0.0.1-tee3",
   "description": "TeeSio, a wrapper around socket.io.js",
   "main": "TeeSio.js",
   "scripts": {

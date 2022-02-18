@@ -41,7 +41,7 @@ class TeeSioCliSocket extends TeeSioSocket{
 
     setUuid(uuid){
         super.setUuid(uuid)
-        if((typeof Cman)!='undefined') Cman.setCook('diuu',this.getUuid())
+        if((typeof Cman)!='undefined') Cman.setCookie('diuu',this.getUuid())
         this.uuidentified = true
     }
 
