@@ -86,8 +86,8 @@ class TeeSioCliSocket extends TeeSioSocket{
 
         if((typeof window)!='undefined' && window.gotCman){
             const uuid = Cman.cooks().hasOwnProperty('diuu') ? Cman.cooks()['diuu'] : null
-            this.setUuid(uuid)
-            cb(uuid)
+            if(uuid)this.setUuid(uuid)
+            if(cb)cb(uuid)
         }
 
     }
