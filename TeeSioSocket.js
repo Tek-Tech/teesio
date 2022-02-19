@@ -9,8 +9,25 @@ class TeeSioSocket extends Ear{
         if(cb)cb()
     }
 
+    post(event,data,cb){
+        console.log('heyy...',event)
+        this.socket.emit(
+            event,data
+        )
+        if(cb)this.get(
+            `${event}Res`,cb
+        )
+    }
+
+    get(event,handler){
+        this.socket.on(
+            event,handler
+        )
+    }
+
+
     _attribute(attribute){
-        return this.identity.hasOwnProperty(attribute) ? this.identity[attribute] : null
+        return this.identity.hasOwnProperty(attribute) ? this.identity[attribute] ? this.identity[attribute] : null : null
     }
     
     setUuid(uuid){
@@ -40,10 +57,20 @@ class TeeSioSocket extends Ear{
 class TeeSioCliSocket extends TeeSioSocket{
 
 
+    whenUuidentified(cb){
+        
+        this.when(
+            'uuidentified',cb
+        )
+
+        
+    }
+
     setUuid(uuid){
         super.setUuid(uuid)
         if((typeof Cman)!='undefined') Cman.setCookie('diuu',this.getUuid())
         this.uuidentified = true
+        this.trigger('uuidentified')
     }
 
     initSocket(cb){
@@ -77,6 +104,7 @@ class TeeSioCliSocket extends TeeSioSocket{
     }
 
 
+
     noUuidentidyProc(){
         this.socket.emit(
             'nouuidentity',{}
@@ -94,7 +122,7 @@ class TeeSioCliSocket extends TeeSioSocket{
     }
 
     connect(cb){
-        this.socket = io.connect('/',window.hasOwnProperty('gotCman')&&Cman.cooks().hasOwnProperty('diuu')?{diuu:Cman.cooks('diuu')}:{})
+        this.socket = io.connect('/',window.hasOwnProperty('gotCman')&&Cman.cooks().hasOwnProperty('diuu')&&Cman.cooks()['diuu']!='null'?{diuu:Cman.cooks()['diuu']}:{})
         if(cb)cb()
     }
 
@@ -113,11 +141,21 @@ class TeeSioServSocket extends TeeSioSocket{
 
     processCliData(){
         console.log('this.is cli data ', this.identity)
+        if(this.identity && this.identity.hasOwnProperty('uuid') && !['null','undefined'].join('-').match(this.identity.uuid)){
+
+        }else{
+            this.generateUuid()
+            this.socket.emit(
+                'givinuuidentity'
+                ,this.getUuid()?this.getUuid():this.generateUuid()
+            )
+        }
     }
 
     generateUuid(){
         const { v4  } = require('uuid')
         let uu = v4()
+        console.log(uu,'is uuid')
         this.setUuid(uu)
         return  uu
     }

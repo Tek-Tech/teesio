@@ -41,6 +41,7 @@ class TeeSio extends Ear{
     init(){
         if(this.gotSio()){
             this.setIo()
+            this.registerSocketListeners()
             this.setReady()
         }
         else{
@@ -49,7 +50,53 @@ class TeeSio extends Ear{
     }
 
     onNewSocket(socket){
-        console.log('got new socket connection...',socket)
+        const sock = new (require(this.getSocketClassPath()).TeeSioServSocket)(socket)
+        this.appendSocket(sock)
+        
+        this.socketlisteners.forEach(
+            listener=>{
+                console.log(listener,'is a listener')
+                sock.get(
+                    listener[0],(data)=>{
+                        listener[1](data,sock)
+                    }
+                )
+            }
+        )
+
+    }
+    
+    registerSocketListeners(listeners=[]){
+        this.socketlisteners = listeners
+    }
+
+    registerSocketListener(listener){
+        this.socketlisteners.push(listener)
+    }
+
+    appendSocket(sock){
+        if(sock.getUuid()){
+            if(this.getSockByUuid())this.replaceSock(uuid,sock)
+            else    this.clisockets.push(sock)
+        }
+    }
+    replaceSock(uuid,sock){
+        this.clisockets.forEach(
+            (socket,idx)=>{
+                if(sock.getUuid()==uuid){
+                    this.clisockets[idx]=sock
+                }
+            }
+        )
+    }
+    getSockByUuid(uuid){
+        let found = null
+        this.clisockets.forEach(
+            sock=>{
+                if(sock.getUuid()==uuid)found = sock
+            }
+        )
+        return found
     }
 
     listen(){
@@ -78,6 +125,8 @@ class TeeSio extends Ear{
 
     constructor(data){
         super()
+        this.socketlisteners = []
+        this.clisockets = []
         this.isListening = false
         this.io = null
         this.config = {}
