@@ -56,6 +56,11 @@ class TeeSio extends Ear{
         this.socketlisteners.forEach(
             listener=>{
                 console.log(listener,'is a listener')
+                socket.off(
+                    listener[0],(data)=>{
+                        listener[1](data,sock)
+                    }
+                )
                 sock.get(
                     listener[0],(data)=>{
                         listener[1](data,sock)
@@ -83,7 +88,8 @@ class TeeSio extends Ear{
     replaceSock(uuid,sock){
         this.clisockets.forEach(
             (socket,idx)=>{
-                if(sock.getUuid()==uuid){
+                if(socket.getUuid()==uuid){
+                    sokcet = sock
                     this.clisockets[idx]=sock
                 }
             }
