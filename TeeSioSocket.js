@@ -316,9 +316,11 @@ class TeeSioServSocket extends TeeSioSocket{
 
     checkSocketGreetings(){
         const {handshake} = this.socket
-        const {query} = handshake
-        const {diuu} = query
-        if(diuu)this.setUuid(diuu)
+        if((typeof handshake) != 'undefined'){
+            const {query} = handshake
+            const {diuu} = query
+            if(diuu)this.setUuid(diuu)
+        }
     }
 
     gotTeeId(){
