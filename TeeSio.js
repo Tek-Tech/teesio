@@ -56,7 +56,6 @@ class TeeSio extends Ear{
         
         this.socketlisteners.forEach(
             listener=>{
-                console.log(listener,'is a listener')
                 socket.off(
                     listener[0],(data)=>{
                         listener[1](data,sock)
