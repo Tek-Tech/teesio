@@ -272,55 +272,56 @@ class TeeSioServSocket extends TeeSioSocket{
     }
 
     __askIdentify(){
-        this.socket.emit(
-            'askingIdentify',{}
-        )
-        this.socket.emit(
-            'askingUuidentify',{}
-        )
-        this.socket.on(
-            'uuidentity',(
-                uuidentity=>{
-                    this.setUuid(uuidentity)
-                    this.processCliData()
+        if(this.socket.emit){
+
+            this.socket.emit(
+                'askingIdentify',{}
+            )
+            this.socket.emit(
+                'askingUuidentify',{}
+            )
+            this.socket.on(
+                'uuidentity',(
+                    uuidentity=>{
+                        this.setUuid(uuidentity)
+                        this.processCliData()
+                    }
+                )
+            )
+            
+            this.socket.on(
+                'nouuidentity',()=>{
+                    this.socket.emit(
+                        'givinuuidentity'
+                        ,this.getUuid()?this.getUuid():this.generateUuid()
+                    )
                 }
             )
-        )
-        
-        this.socket.on(
-            'nouuidentity',()=>{
-                this.socket.emit(
-                    'givinuuidentity'
-                    ,this.getUuid()?this.getUuid():this.generateUuid()
+            this.socket.on(
+                'identity',(
+                    identity=>{
+                        this.setTeeid(identity)
+                        this.processCliData()
+                    }
                 )
-            }
-        )
-        this.socket.on(
-            'identity',(
-                identity=>{
-                    this.setTeeid(identity)
-                    this.processCliData()
+            )
+            
+            this.socket.on(
+                'nouuidentity',()=>{
+                    this.socket.emit(
+                        'givinuuidentity'
+                        ,this.getUuid()?this.getUuid():this.generateUuid()
+                    )
                 }
             )
-        )
-        
-        this.socket.on(
-            'nouuidentity',()=>{
-                this.socket.emit(
-                    'givinuuidentity'
-                    ,this.getUuid()?this.getUuid():this.generateUuid()
-                )
-            }
-        )
+        }
     }
 
     checkSocketGreetings(){
         const {handshake} = this.socket
-        if((typeof handshake) != 'undefined'){
-            const {query} = handshake
-            const {diuu} = query
-            if(diuu)this.setUuid(diuu)
-        }
+        const {query} = handshake ? handshake : {query:{diuu:null}}
+        const {diuu} = query
+        if(diuu)this.setUuid(diuu)
     }
 
     gotTeeId(){
