@@ -41,7 +41,8 @@ class TeeSio extends Ear{
     init(){
         if(this.gotSio()){
             this.setIo()
-            this.registerSocketListeners()
+            const listeners = this.getConfig('listeners')?this.getConfig('listeners'):[]
+            this.registerSocketListeners(listeners)
             this.setReady()
         }
         else{
