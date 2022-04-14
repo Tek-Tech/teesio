@@ -173,5 +173,5 @@ class TeeSioServSocket extends TeeSioSocket{
 
 
 if((typeof module)!=='undefined'){
-    module.exports = {TeeSioServSocket}
+    module.exports = {TeeSioSocket,TeeSioServSocket,TeeSioCliSocket}
 }
