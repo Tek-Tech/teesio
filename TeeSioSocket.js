@@ -64,14 +64,14 @@ class TeeSioCliSocket extends TeeSioSocket{
 
     initSocket(cb){
  
-        this.socket.on(
+        this.get(
             'askingUuidentify',()=>{
 
                 this.showUuidentity()
         
             }
         )
-        this.socket.on(
+        this.get(
             'givinuuidentity',uuid=>{
                 this.setUuid()
             }
@@ -93,7 +93,7 @@ class TeeSioCliSocket extends TeeSioSocket{
     }
 
     noUuidentidyProc(){
-        this.socket.emit(
+        this.post(
             'nouuidentity',{}
         )
     }
@@ -138,13 +138,13 @@ class TeeSioServSocket extends TeeSioSocket{
     }
 
     __askIdentify(){
-        this.socket.emit(
+        this.post(
             'askingIdentity',{}
         )
-        this.socket.emit(
+        this.post(
             'askingUuidentify',{}
         )
-        this.socket.on(
+        this.get(
             'uuidentity',(
                 uuidentity=>{
                     this.setUuid(uuidentity)
