@@ -75,6 +75,20 @@ class TeeSioCliSocket extends TeeSioSocket{
 
     }
 
+    post(tgt,data,cb){
+        this.socket.emit(
+            tgt,data
+        )
+        if(cb)  this.get(
+            `${tgt}Res`,cb
+        )
+    }
+
+    get(tgt,cb){
+        if(cb)this.socket.on(
+            `${tgt}`,cb
+        )
+    }
 
     noUuidentidyProc(){
         this.socket.emit(
@@ -93,7 +107,7 @@ class TeeSioCliSocket extends TeeSioSocket{
     }
 
     connect(cb){
-        this.socket = io.connect('/',window.hasOwnProperty('gotCman')&&Cman.cooks().hasOwnProperty('diuu')?{diuu:Cman.cooks('diuu')}:{})
+        this.socket = io.connect('/',window.hasOwnProperty('gotCman')&&Cman.cooks().hasOwnProperty('diuu')&&Cman.cooks('diuu')!='null'?{diuu:Cman.cooks('diuu')}:{})
         if(cb)cb()
     }
 
