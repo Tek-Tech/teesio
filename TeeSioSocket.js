@@ -3,6 +3,23 @@ if((typeof window)=='undefined'){
 }
 class TeeSioSocket extends Ear{
 
+
+
+    post(tgt,data,cb){
+        this.socket.emit(
+            tgt,data
+        )
+        if(cb)  this.get(
+            `${tgt}Res`,cb
+        )
+    }
+
+    get(tgt,cb){
+        if(cb)this.socket.on(
+            `${tgt}`,cb
+        )
+    }
+
     initSocket(cb){
  
         if(cb)cb()
@@ -73,21 +90,6 @@ class TeeSioCliSocket extends TeeSioSocket{
         )
 
 
-    }
-
-    post(tgt,data,cb){
-        this.socket.emit(
-            tgt,data
-        )
-        if(cb)  this.get(
-            `${tgt}Res`,cb
-        )
-    }
-
-    get(tgt,cb){
-        if(cb)this.socket.on(
-            `${tgt}`,cb
-        )
     }
 
     noUuidentidyProc(){
