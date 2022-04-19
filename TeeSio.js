@@ -80,6 +80,7 @@ class TeeSio extends Ear{
     }
 
     appendSocket(sock){
+        this.broadcastlist.push(sock)
         if(sock.getUuid()){
             if(this.getSockByUuid())this.replaceSock(uuid,sock)
             else    this.clisockets.push(sock)
@@ -131,6 +132,7 @@ class TeeSio extends Ear{
 
     constructor(data){
         super()
+        this.broadcastlist = []
         this.socketlisteners = []
         this.clisockets = []
         this.isListening = false
